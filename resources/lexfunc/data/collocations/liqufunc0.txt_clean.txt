@@ -1,0 +1,118 @@
+red tape	cut
+agression	stop
+ambiguity	remove
+ambiguity	resolve
+appetite	cut
+balance	shake
+balance	shatter
+balance	tilt
+barrier	break down
+barrier	break
+barrier	knock down
+calm	shatter
+career	ruin
+claim	explode
+committee	dissolve
+concern	quell
+confidence	shake
+confidence	shred
+conflict	resolve
+corruption	clean up
+crisis	defuse
+criticism	silence
+criticism	stifle
+current	cut
+damage	fix
+damage	repair
+deadlock	break
+debate	silence
+defenses	knock out
+dissent	stifle
+door	break down
+door	knock down
+doubt	dispel
+doubt	erase
+doubt	remove
+economy	stifle
+fear	allay
+fear	explode
+fears	allay
+file	delete
+file	erase
+fire	extinguish
+fire	put out
+fire	quench
+flow	block
+flow	stem
+fog	burn off
+fog	dissipate
+fun	ruin
+gap	close
+gap	fill
+government	bring down
+government	topple
+hole	patch
+hope	dash
+hope	defeat
+hope	end
+hope	kill
+jam	clear
+job	cut
+job	eliminate
+link	cut
+link	sever
+loophole	close
+lull	shatter
+maidenhead	steal
+marriage	annul
+mess	clean up
+mine	clear
+mist	burn
+mistake	correct
+mosquito	swat
+myth	debunk
+myth	explode
+need	obviate
+need	put an end
+need	remove
+odor	eliminate
+page	rip off
+parliament	dissolve
+peace	destroy
+peace	shatter
+plot	break up
+post	cut
+power	knock out
+pregnancy	terminate
+problem	work
+problem	work out
+prohibition	lift
+record	break
+regime	topple
+restriction	lift
+riot	quash
+rumors	end
+rumors	spike
+rumors	squash
+scourge	lift
+ship	send to the bottom
+ship	sink
+silence	break
+sleep	interrupt
+stalemate	break
+suspension	lift
+suspicion	clear
+theory	debunk
+theory	demolish
+tonsils	remove
+tonsils	take out
+traces	wipe out
+trend	reverse
+unrest	put down
+uprising	crush
+uprising	put down
+uprising	put out
+village	flatten
+violence	curb
+violence	quell
+violence	stop

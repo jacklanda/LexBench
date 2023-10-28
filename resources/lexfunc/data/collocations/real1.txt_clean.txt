@@ -1,0 +1,316 @@
+landing gear	lower
+place of honor	hold
+pride of place	enjoy
+pride of place	have
+pride of place	hold
+red light	stop
+safe haven	find
+address	deliver
+aircraft	fly
+aircraft	pilot
+ambush	lay
+ambush	lay
+ambush	set
+anchor	lie
+anchor	ride
+animal	tend
+appointment	keep
+arrest	detain
+arrest	hold
+artillery	fire
+attempt	succeed
+authority	wield
+award	present
+badge	flash
+ballot	cast
+bar	tend
+bargain	hold up X's end
+bath	take
+bead	draw
+bed	be
+bedpan	carry
+bee	keep
+behind bars	be
+benefit	derive
+benefit	gain
+benefit	reap
+bet	win
+bicycle	ride
+bill	foot
+bill	honor
+bill	pass
+bill	pay
+birthday	celebrate
+birthmark	have
+blank	fill in
+blister	have
+bomb	drop
+bounty on N’s head	have
+bounty on N’s head	put
+brake	apply
+brake	set
+brake	step
+budget	balance
+burn	go up in flames
+business	run
+button	hit
+button	push
+cancer	succumb
+cards	play
+cards	shuffle
+case	win
+cattle	graze
+cattle	tend
+caution	exercise
+caution	use
+chair	fill
+chair	hold
+chance	take
+chasm	bridge
+chord	strike
+clothes	wear
+combat	win
+command	carry out
+command	execute
+commitment	abide
+commitment	honor
+commitment	live up
+commitment	meet
+company	keep
+consequences	face
+control	exercise
+control	exert
+convention	follow
+convention	observe
+course of action	pursue
+debt	pay back
+debt	pay off
+debt	repay
+decision	follow through
+defeat	concede
+details	give
+detour	take
+diary	keep
+dice	roll
+dish	do
+dispute	resolve
+dream	fulfill
+drugs	do
+drugs	take
+drum	beat
+drum	drum
+duty	carry out
+duty	discharge
+duty	do
+duty	fulfill
+enema	give
+enema	rare do
+exit	take
+fire	go up in flames
+firearm	blast away
+firearm	fire
+flag	fly
+frustration	take out
+frustration	vent
+fury	vent
+game	win
+gift	offer
+glasses	wear
+goal	score
+God	worship
+grade	give
+grain	grind
+grenade	lob
+guitar	play
+gun	fire
+gun	shoot
+heed	take
+highway	take
+holiday	keep
+horse	ride
+hunger	quell
+hunger	quench
+hunger	satisfy
+illness	succumb
+imagination	exercise
+instinct	follow
+instructions	execute
+instructions	follow
+invective	hurl
+key	hit
+key	push
+knife	sink
+knife	take
+label	stick
+language	speak
+letter	send
+line	follow
+line	stand
+line	follow
+listen	hear
+load	carry
+lots	cast
+lots	draw
+lots	toss a coin
+luggage	pack
+mailbox	empty
+mark	give
+match	strike
+medal	award
+meeting	attend
+mine	operate
+missile	fire
+missile	launch
+mortars	lob
+moth	be-infested
+moth	have
+motion	carry
+mourning	be
+music	play
+need	fulfill
+need	satisfy
+net	cast
+norm	observe
+number	dial
+number	dial
+nut	crack
+obligation	fulfill
+obligation	live up
+obligation	meet
+opinion	share
+opinion	opine
+opportunity	take
+parachute	parachute
+parentheses	be included
+passport	carry
+passport	hold
+path	follow
+patient	examine
+patient	see
+patient	treat
+pattern	follow
+peak	climb
+peak	scale
+perfume	wear
+photo	develop
+photograph	develop
+pimple	pick
+pimple	pop
+pistol	fire
+place	place
+plan	carry out
+plan	execute
+plan	fulfill
+plan	go through
+plan	pull off
+plane	fly
+plane	pilot
+pledge	keep
+plug	pull
+point	score
+policy	conduct
+policy	follow
+policy	pursue
+pool	shoot
+port	call
+possibility	grasp
+possibility	jump
+power	exert
+price	pay
+price	pay
+principle	apply
+principle	follow
+principle	respect
+principle	satisfy
+prisoner	capture
+prize	award
+prize	extend
+prize	give
+prize	offer
+promise	deliver
+promise	fulfill
+promise	honor
+promise	keep
+promise	live up
+promise	make good
+promise	stick
+purpose	achieve
+purpose	of set
+purpose	on
+purpose	by design
+race	win
+rage	vent
+reading	take
+resources	harness
+right	enjoy
+ritual	follow
+rocket	fire
+scent	wear
+schedule	respect
+school	go
+seat belt	fasten
+seatbelt	buckle up
+secret	keep
+session	attend
+sheep	tend
+shoot	hit
+shoot	kill
+shoot	wound
+shop	run
+sights	set
+sights	train
+smatterings	have
+snag	hit
+spear	drive
+stamp	put
+store	keep
+strategy	pursue
+surface	break
+surface	rise
+surface	surface
+sweat	sweat
+switch	flick
+switch	flip
+switch	throw
+target	hit
+target	strike
+tear gas	launch
+tear gas	throw
+tear gas	use
+tears	shed
+telephone	use
+theory	hold
+thesis	defend
+threat	carry through
+threat	deliver
+threat	follow up
+threat	make good
+time	take
+toast	proposed
+toilet	flush
+track	be
+tradition	follow
+tradition	have
+tradition	keep up
+tradition	observe
+tradition	respect
+tradition	stand in
+tradition	uphold
+trap	lay
+trap	set
+trigger	press
+trigger	pull
+trigger	squeeze
+tryst	keep
+uniform	wear
+urine	pass
+urine	pee
+urine	urinate
+urine	urinate
+vote	cast
+water	give
+wedge	drive
+whim	satidfy
+wish	get
+word	keep
+wound	succumb

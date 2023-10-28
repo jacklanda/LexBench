@@ -1,0 +1,150 @@
+bad blood	create
+bad blood	make
+red herring	lay
+red herring	plant
+agreement	lead
+agreement	trigger
+alarm	prompt
+alarm	raise
+aliance	forge
+amusement	cause
+anger	arouse
+anger	provoke
+anger	spark
+anger	stir up
+anger	light the (blue) touchpaper
+appearance	give
+association	conjure
+balance	strike
+beer	brewV
+boundaries	set
+breakthrough	bring
+bridge	throw
+campaign 	ignite
+coffee	brew
+committee	strike
+condition	lay down
+condition	pose
+conference	hold
+confidence	build
+consensus	develop
+crisis	create
+crisis	spark
+crisis	touch off
+crowd	draw
+damage	cause
+damage	wrought
+date	set
+death	claim NX’s life
+death	claim NUM fatalities
+debate	spark
+debate	spur
+demonstration	touch off
+difficulties	cause
+discussion	spark off
+disruption	cause
+effect	produce
+egg	lay
+elections	hold
+emotion	stir
+energy	release
+evidence	give
+evidence	provide
+evidence	uncover
+example	adduce
+example	cite
+example	set
+example	examplify
+expectations	raise
+fatalities	causes
+fears	raise
+fight	spark
+file	keep
+fire	build
+fire	set
+fire	start
+fire	touch off
+food	make
+foundation	lay
+fruit	bear
+funds	raise
+furor	ignite
+gossip	carry
+groundwork	lay
+hole	knock
+income	generate
+interest	start
+key	cut
+law	lay down
+link	make
+list	draw up
+list	make
+meeting	convene
+mess	make
+mine	plant
+mine	lay
+minefield	lay
+miracle	perform
+miracle	work
+momentum	build up
+need	create
+notes	jot
+objection	raise
+offensive	mount
+option	open
+order	impose
+outcry	lead
+outcry	stir
+outrage	cause
+panic	sow
+panic	stir
+parallel	draw
+path	chart
+perpendicular	drop
+picture	brush
+picture	give
+possibility	raise
+precedent	set
+press conference	hold
+problem	cause
+problem	create
+problem	give rise
+profit	make
+profit	turn
+proof	give
+protest	spark
+question	raise
+question	raise
+record	set
+release	secure
+relief	bring
+relief	relieve
+result	derive
+roadblock	throw up
+ruckus	create
+rule	impose
+rule	lay down
+rumors	arouse
+rumors	stir
+rumors	send tongues wagging
+schedule	set
+search	spark
+shock	create
+shockwave	send
+shower	have
+speculation	prompt
+stage	set
+steak	cook
+suspicion	spark
+term	coin
+timetable	set
+tissue	weave
+toll	take
+tone	set
+tournament	hold
+track	leave
+unrest	spark
+uproar	set off
+victim	claim
+violence	ignite
+wonders	work
