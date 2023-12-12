@@ -51,6 +51,8 @@ config_graph: Dict{} : 'label_size', 'use_two_attn', 'just_attn'
 Output: BERTGraph model initialised with pre-trained transformers
 """
 
+logger = logging.getLogger(__name__)
+
 
 def initialize_bertgraph(BERT_NAME_OR_PATH, config_graph=None):
     bertgconfig = BertGraphConfig.from_pretrained(BERT_NAME_OR_PATH)
@@ -444,7 +446,7 @@ class BertGraphLayer(nn.Module):
         self.add_cross_attention = config.add_cross_attention
         if self.add_cross_attention:
             assert self.is_decoder, f"{self} should be used as a decoder model if cross attention is added"
-            self.crossattention = BertAttention(config)
+            # self.crossattention = BertAttention(config)
         self.intermediate = BertIntermediate(config)
         self.output = BertOutput(config)
 

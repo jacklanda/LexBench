@@ -29,7 +29,8 @@ class JointXLMRoberta(XLMRobertaModel):
             self.xlmroberta = XLMRobertaModel.from_pretrained(args.model_name_or_path)  # Load pretrained bert
 
         if args.use_crf:
-            self.crf = CRF(num_tags=self.num_slot_labels, batch_first=True)
+            # self.crf = CRF(num_tags=self.num_slot_labels, batch_first=True)
+            raise NotImplementedError("CRF not implemented yet")
 
     def forward(self, input_ids, attention_mask, token_type_ids, intent_label_ids, slot_labels_ids,
                 pos_ids=None, graph_dep=None):
