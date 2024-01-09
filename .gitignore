@@ -5,6 +5,7 @@ __pycache__/
 .ipynb_checkpoints
 
 # Experiment folder / checkpoint
+data/
 exp/
 *.pt
 *.bin
