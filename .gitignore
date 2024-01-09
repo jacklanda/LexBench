@@ -6,6 +6,7 @@ __pycache__/
 
 # Experiment folder / checkpoint
 data/
+dataset/
 exp/
 *.pt
 *.bin
