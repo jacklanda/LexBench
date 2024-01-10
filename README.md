@@ -1,4 +1,4 @@
-# LexBench: Benchmarking LLMs for Collocation Understanding
+# LexBench: Benchmarking LLMs for Multi-word Expression Understanding
 
 👷🏻‍♂️ WIP.
 
