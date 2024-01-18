@@ -39,15 +39,23 @@ def prepare_data_idiom_extraction(
     data_path: str = "dataset/train_english.tsv",
     dump_data_path: Optional[str] = None,
     only_valid_example: bool = True,
-    dedup_idiom: bool = True,
+    dedup_by_idiom: bool = True,
     max_data_limit: Optional[int] = None,
     verbose: bool = True,
 ) -> List[str]:
     """
-    This function is to prepare the idiom data for evaluation.
+    Prepare the idiom data for extraction evaluation.
 
     Args:
     - data_path: the path of the data file
+    - dump_data_path: the path of the prepared data file
+    - only_valid_example: whether to only keep the valid examples
+    - dedup_by_idiom: whether to deduplicate the data by idiom
+    - max_data_limit: the max data limit
+    - verbose: whether to print the statistics
+
+    Returns:
+    - output_data: the prepared data
     """
 
     # read the data
@@ -81,7 +89,7 @@ def prepare_data_idiom_extraction(
     if current_sentence:
         sentences.append((current_sentence, current_phrase))
 
-    if dedup_idiom:
+    if dedup_by_idiom:
         dedup_sentences = []
         for sentence, phrase in sentences:
             if phrase:
@@ -127,7 +135,7 @@ def prepare_data_idiom_detection(
     refer_data_path: str,
     idiom_data_path: str,
     dump_data_path: str = "dataset/idiom_detection/prepared/idiom_detection_prepared.tsv",
-    dedup_idiom: bool = True,
+    dedup_by_idiom: bool = True,
     verbose: bool = True,
 ) -> List[str]:
     """
@@ -137,6 +145,11 @@ def prepare_data_idiom_detection(
     - refer_data_path: the path of the refer data file
     - idiom_data_path: the path of the idiom data file
     - dump_data_path: the path of the prepared data file
+    - dedup_by_idiom: whether to deduplicate the data by idiom
+    - verbose: whether to print the statistics
+
+    Returns:
+    - data_examples: the prepared data
     """
 
     data_examples = []
@@ -181,7 +194,7 @@ def prepare_data_idiom_detection(
         data_examples.append(data_example)
 
     # deduplicate `data_example` by field "idiom" for each item
-    if dedup_idiom:
+    if dedup_by_idiom:
         idx = 0
         dedup_data_examples = []
         dedup_idiom_set = set()
@@ -212,15 +225,201 @@ def prepare_data_idiom_detection(
     return data_examples
 
 
+def prepare_data_idiom_paraphrase(
+    idiom_data_path: str,
+    dump_data_path: str = "dataset/idiom_paraphrase/prepared/idiom_paraphrase_prepared.tsv",
+    dedup_by_idiom: bool = True,
+    verbose: bool = True,
+) -> List[str]:
+    """
+    Prepare the idiom data for paraphrase evaluation.
+
+    Args:
+    - idiom_data_path: the path of the idiom data file
+    - dump_data_path: the path of the prepared data file
+    - dedup_by_idiom: whether to deduplicate the data by idiom
+    - verbose: whether to print the statistics
+    """
+    data_examples = []
+    idiom_df = pd.read_csv(idiom_data_path)
+
+    for i in range(len(idiom_df)):
+        data_example = {
+            "id": str(i).zfill(4),
+            "idiom": idiom_df.iloc[i, 0],
+            "paraphrase": idiom_df.iloc[i, 1],
+            "context_idiomatic": idiom_df.iloc[i, 2],
+            "context_literal": idiom_df.iloc[i, 3],
+        }
+        data_examples.append(data_example)
+
+    if dedup_by_idiom:
+        idx = 0
+        dedup_data_examples = []
+        dedup_idiom_set = set()
+        for item in data_examples:
+            dedup_idiom_set.add(item["idiom"])
+        for item in data_examples:
+            if item["idiom"] in dedup_idiom_set:
+                item["id"] = str(idx).zfill(3)
+                dedup_data_examples.append(item)
+                dedup_idiom_set.remove(item["idiom"])
+                idx += 1
+        data_examples = dedup_data_examples
+
+    if dump_data_path:
+        if not os.path.exists(os.path.dirname(dump_data_path)):
+            os.makedirs(os.path.dirname(dump_data_path))
+        with open(dump_data_path, "w") as f:
+            f.write(f"id\tidiom\tparaphrase\tcontext_idiomatic\tcontext_literal\n")
+            for item in data_examples:
+                f.write(
+                    f"{item['id']}\t{item['idiom']}\t{item['paraphrase']}\t{item['context_idiomatic']}\t{item['context_literal']}\n"
+                )
+    if verbose:
+        print("Total instances:", len(data_examples))
+
+    return data_examples
+
+
+def sample_data_collocate_retrieval(
+    data_path: str = "dataset/collocate_retrieval/Collocations_en.csv",
+    dump_data_path: Optional[str] = None,
+    category_num: int = 8,
+    min_context_size: int = 16,
+    max_context_size: int = 64,
+    dedup: bool = True,
+) -> None:
+    """
+    Sample the collocate retrieval data for evaluation.
+
+    Args:
+    - data_path: the path of the data file
+    - dump_data_path: the path of the prepared data file
+    - category_num: the number of categories to sample
+    - min_context_size: the min context size
+    - max_context_size: the max context size
+    - dedup: whether to deduplicate the data by the whole collocation
+
+    Returns:
+    - output_data: the prepared data
+    """
+    if category_num == 8:
+        lf_category = [
+            "Magn",
+            "AntiMagn",
+            "Ver",
+            "AntiVer",
+            "Bon",
+            "AntiBon",
+            "Son",
+            "Oper1",
+        ]
+    else:
+        raise NotImplementedError(f"category_num={category_num} is not implemented.")
+
+    # Step 0. load all instances from the original file
+    df_all = pd.read_csv(data_path, sep="\t")
+
+    # Step 1. deduplicate by the 2nd and 5th value of column (collocation = base ⊕ collocate), if needed
+    if dedup:
+        df_all = df_all.drop_duplicates(subset=[df_all.columns[1], df_all.columns[4]])
+
+    # Step 2. filter out all the rows that 11th column's value word size is not in the interval [16, 64]
+    df_all = df_all[
+        df_all[df_all.columns[10]].apply(
+            lambda x: min_context_size <= len(x.split()) <= max_context_size
+        )
+    ]
+
+    # Step 3. random select 30 examples for each group which is clustered by the 6th column, from the `lf_category`
+    df_sample = pd.DataFrame()
+    for category in lf_category:
+        df_category = df_all[df_all[df_all.columns[5]] == category]
+        df_category_sample = df_category.sample(n=30, random_state=42)
+        df_sample = df_sample._append(df_category_sample)
+
+    # Step 4. dump the sampled data to the `dump_data_path`
+    if dump_data_path:
+        if not os.path.exists(os.path.dirname(dump_data_path)):
+            os.makedirs(os.path.dirname(dump_data_path))
+        df_sample.to_csv(dump_data_path, sep="\t", index=False)
+
+
+def prepare_data_collocate_retrieval(
+    data_path: str = "dataset/collocate_retrieval/Collocations_en.csv",
+    dump_data_path: Optional[str] = None,
+    max_data_limit: int = 300,
+    verbose: bool = True,
+) -> List[str]:
+    """
+    Prepare the collocate retrieval data for evaluation.
+
+    Args:
+    - data_path: the path of the data file
+    - dump_data_path: the path of the prepared data file
+    - max_data_limit: the max data limit
+    - verbose: whether to print the statistics
+
+    Returns:
+    - output_data: the prepared data
+    """
+    df = pd.read_csv(data_path, sep="\t")
+
+    instances_processed = []
+    for i in range(len(df)):
+        base = df.iloc[i, 1].replace("_", "")
+        collocate = df.iloc[i, 4].replace("_", "")
+        collocation = (
+            f"{base} {collocate}"
+            if int(df.iloc[i, 6]) > int(df.iloc[i, 7])
+            else f"{collocate} {base}"
+        )
+        instance = {
+            "id": str(i).zfill(3),
+            "base": base,
+            "collocate": collocate,
+            "collocation": collocation,
+            "label": df.iloc[i, 5],
+            "context": df.iloc[i, 10],
+        }
+        instances_processed.append(instance)
+
+    if dump_data_path:
+        if not os.path.exists(os.path.dirname(dump_data_path)):
+            os.makedirs(os.path.dirname(dump_data_path))
+        # dump `instances_processed`
+        with open(dump_data_path, "w") as f:
+            for instance in instances_processed:
+                f.write(
+                    f"{instance['id']}\t{instance['base']}\t{instance['collocate']}\t{instance['collocation']}\t{instance['label']}\t{instance['context']}\n"
+                )
+
+
 if __name__ == "__main__":
+    # Task 1: Idiomatic Expression Detection (IED)
+    # idiom_detection_examples = prepare_data_idiom_detection(
+    # refer_data_path="/Users/jacklanda/Desktop/LexBench/scripts/dataset/idiom_detection/reference_data.csv",
+    # idiom_data_path="/Users/jacklanda/Desktop/LexBench/scripts/dataset/idiom_detection/idiom_data.csv",
+    # )
+
+    # Task 2: Idiomatic Expression Extraction (IEE)
     # idiom_extraction_examples = prepare_data_idiom_extraction(
     # data_path="dataset/idiom_extraction/dev_english.tsv",
     # dump_data_path="dataset/idiom_extraction/prepared/idiom_extraction_prepared.tsv",
     # )
-    # print(len(idiom_extraction_examples))
-    # pprint(data=idiom_list)
-    # rich.print_json(data=idiom_list)
-    idiom_detection_examples = prepare_data_idiom_detection(
-        refer_data_path="/Users/jacklanda/Desktop/LexBench/scripts/dataset/idiom_detection/reference_data.csv",
-        idiom_data_path="/Users/jacklanda/Desktop/LexBench/scripts/dataset/idiom_detection/idiom_data.csv",
+
+    # Task 3: Idiomatic Expression Paraphrase (IEP)
+    # idiom_paraphrase_examples = prepare_data_idiom_paraphrase(
+    # idiom_data_path="/Users/jacklanda/Desktop/LexBench/scripts/dataset/idiom_paraphrase/data_cleaned.csv"
+    # )
+
+    # Task 4: Lexical Collocate Retrieval (LCR)
+    # sample_data_collocate_retrieval(
+    # data_path="dataset/collocate_retrieval/Collocations_en.tsv",
+    # dump_data_path="dataset/collocate_retrieval/Collocations_en_test.tsv",
+    # )
+    collocate_retrieval_examples = prepare_data_collocate_retrieval(
+        data_path="dataset/collocate_retrieval/Collocations_en_test.tsv",
+        dump_data_path="dataset/collocate_retrieval/prepared/collocate_retrieval_prepared.tsv",
     )
