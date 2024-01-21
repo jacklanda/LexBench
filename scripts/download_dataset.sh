@@ -11,6 +11,11 @@ asilm_idiom_test_dataset_url="https://raw.githubusercontent.com/H-TayyarMadabush
 
 id10m_dataset_url="https://raw.githubusercontent.com/Babelscape/ID10M/master/resources/bio_format/english/dev_english.tsv"
 
+# Noun Compound Data
+noun_compound_extraction_dataset_url="https://raw.githubusercontent.com/dair-iitd/pronci/main/data/test.jsonl"
+noun_compound_interpretation_dev_dataset_url="https://raw.githubusercontent.com/jordancoil/noun-compound-interpretation/main/data/valid_df.csv"
+noun_compound_interpretation_test_dataset_url="https://raw.githubusercontent.com/jordancoil/noun-compound-interpretation/main/data/test_df.csv"
+
 # Add help for dataset downloading
 if [ "$1" == "" ] || [ "$1" == "-h" ]; then
     echo "Usage: ./download_dataset.sh [dataset_name]"
@@ -50,5 +55,14 @@ if [ "$1" == "pie" ]; then
     echo "[Downloading] PIE dataset"
     mkdir -p "dataset/idiom_paraphrase/"
     wget -P "dataset/idiom_paraphrase/" $pie_dataset_url
+    exit 0
+fi
+
+# Noun Compound for [Noun Compound Interpretation]
+if [ "$1" == "nci" ]; then
+    echo "[Downloading] Dataset for Noun Compound Interpretation"
+    mkdir -p "dataset/noun_compound_interpretation/"
+    wget -P "dataset/noun_compound_interpretation/" $noun_compound_interpretation_dev_dataset_url
+    wget -P "dataset/noun_compound_interpretation/" $noun_compound_interpretation_test_dataset_url
     exit 0
 fi

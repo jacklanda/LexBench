@@ -8,10 +8,11 @@
 # data processing, data preparation in our paper: ``Benchmarking LLMs for Collocation Understanding''.
 
 import os
+import ast
 import random
 import pandas as pd
 from pprint import pprint
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 import rich
 import torch
@@ -286,6 +287,7 @@ def sample_data_collocate_retrieval(
     data_path: str = "dataset/collocate_retrieval/Collocations_en.csv",
     dump_data_path: Optional[str] = None,
     category_num: int = 8,
+    max_instance_num_per_category: int = 30,
     min_context_size: int = 16,
     max_context_size: int = 64,
     dedup: bool = True,
@@ -297,12 +299,13 @@ def sample_data_collocate_retrieval(
     - data_path: the path of the data file
     - dump_data_path: the path of the prepared data file
     - category_num: the number of categories to sample
+    - max_instance_num_per_category: the max instance number per category
     - min_context_size: the min context size
     - max_context_size: the max context size
     - dedup: whether to deduplicate the data by the whole collocation
 
     Returns:
-    - output_data: the prepared data
+    - None
     """
     if category_num == 8:
         lf_category = [
@@ -323,6 +326,7 @@ def sample_data_collocate_retrieval(
 
     # Step 1. deduplicate by the 2nd and 5th value of column (collocation = base ⊕ collocate), if needed
     if dedup:
+        # df_all = df_all.drop_duplicates(subset=[df_all.columns[1]])
         df_all = df_all.drop_duplicates(subset=[df_all.columns[1], df_all.columns[4]])
 
     # Step 2. filter out all the rows that 11th column's value word size is not in the interval [16, 64]
@@ -336,7 +340,11 @@ def sample_data_collocate_retrieval(
     df_sample = pd.DataFrame()
     for category in lf_category:
         df_category = df_all[df_all[df_all.columns[5]] == category]
-        df_category_sample = df_category.sample(n=30, random_state=42)
+        df_category_sample = df_category.sample(
+            n=max_instance_num_per_category,
+            random_state=42,
+            # replace=True,
+        )
         df_sample = df_sample._append(df_category_sample)
 
     # Step 4. dump the sampled data to the `dump_data_path`
@@ -349,7 +357,11 @@ def sample_data_collocate_retrieval(
 def prepare_data_collocate_retrieval(
     data_path: str = "dataset/collocate_retrieval/Collocations_en.csv",
     dump_data_path: Optional[str] = None,
-    max_data_limit: int = 300,
+    base_word_num: Optional[int] = None,
+    collocate_word_num: Optional[int] = None,
+    max_data_limit: int = 320,
+    max_instance_num_per_category: int = 40,
+    mask_collocate: bool = True,
     verbose: bool = True,
 ) -> List[str]:
     """
@@ -358,7 +370,11 @@ def prepare_data_collocate_retrieval(
     Args:
     - data_path: the path of the data file
     - dump_data_path: the path of the prepared data file
+    - base_word_num: the number of words in the base (constraint)
+    - collocate_word_num: the number of words in the collocate (constraint)
     - max_data_limit: the max data limit
+    - max_instance_num_per_category: the max instance number per category
+    - mask_collocate: whether to mask the collocate
     - verbose: whether to print the statistics
 
     Returns:
@@ -366,24 +382,47 @@ def prepare_data_collocate_retrieval(
     """
     df = pd.read_csv(data_path, sep="\t")
 
+    category2freq = dict()
     instances_processed = []
     for i in range(len(df)):
         base = df.iloc[i, 1].replace("_", "")
+        collocate_idx = int(df.iloc[i, 6]) - 1
         collocate = df.iloc[i, 4].replace("_", "")
+        if base_word_num and len(base.split()) > base_word_num:
+            continue
+        if collocate_word_num and len(collocate.split()) > collocate_word_num:
+            continue
         collocation = (
             f"{base} {collocate}"
             if int(df.iloc[i, 6]) > int(df.iloc[i, 7])
             else f"{collocate} {base}"
         )
+        label = df.iloc[i, 5]
+        if category2freq.get(label, 0) >= max_instance_num_per_category:
+            continue
+        if mask_collocate:
+            words = df.iloc[i, 10].split()
+            if words[collocate_idx] != collocate:
+                print(
+                    f"id: {str(i).zfill(3)}\twords[collocate_idx] ({words[collocate_idx]}) != collocate ({collocate})."
+                    "\tplease compile this instance manually."
+                )
+                # continue
+            else:
+                words[collocate_idx] = "[MASK]"
+            context = " ".join(words)
+        else:
+            context = df.iloc[i, 10]
         instance = {
             "id": str(i).zfill(3),
             "base": base,
             "collocate": collocate,
             "collocation": collocation,
             "label": df.iloc[i, 5],
-            "context": df.iloc[i, 10],
+            "context": context,
         }
         instances_processed.append(instance)
+        category2freq[label] = category2freq.get(label, 0) + 1
 
     if dump_data_path:
         if not os.path.exists(os.path.dirname(dump_data_path)):
@@ -394,6 +433,53 @@ def prepare_data_collocate_retrieval(
                 f.write(
                     f"{instance['id']}\t{instance['base']}\t{instance['collocate']}\t{instance['collocation']}\t{instance['label']}\t{instance['context']}\n"
                 )
+
+
+def prepare_noun_compound_interpretation(
+    data_path: str,
+    dump_data_path: Optional[str] = None,
+    max_data_limit: int = 110,
+    verbose: bool = True,
+) -> List[Dict[str, Any]]:
+    """
+    Prepare the noun compound interpretation data for evaluation.
+
+    Args:
+    - data_path: the path of the data file
+    - dump_data_path: the path of the prepared data file
+    - max_data_limit: the max data limit
+    - verbose: whether to print the statistics
+
+    Returns:
+    - output_data: the prepared data
+    """
+    df = pd.read_csv(data_path, sep=",")
+    output_data = []
+    for i in range(len(df)):
+        noun_compound = df.iloc[i, 1]
+        paraphrases = ast.literal_eval(df.iloc[i, 2])
+        output_data.append(
+            {
+                "id": str(i).zfill(3),
+                "noun_compound": noun_compound,
+                "paraphrases": paraphrases,
+            }
+        )
+
+    if dump_data_path:
+        if not os.path.exists(os.path.dirname(dump_data_path)):
+            os.makedirs(os.path.dirname(dump_data_path))
+        # dump `output_data`
+        with open(dump_data_path, "w") as f:
+            for item in output_data:
+                f.write(
+                    f"{item['id']}\t{item['noun_compound']}\t{item['paraphrases']}\n"
+                )
+
+    if verbose:
+        print("Total instances:", len(output_data))
+
+    return output_data
 
 
 if __name__ == "__main__":
@@ -416,10 +502,24 @@ if __name__ == "__main__":
 
     # Task 4: Lexical Collocate Retrieval (LCR)
     # sample_data_collocate_retrieval(
-    # data_path="dataset/collocate_retrieval/Collocations_en.tsv",
-    # dump_data_path="dataset/collocate_retrieval/Collocations_en_test.tsv",
+        # data_path="dataset/collocate_retrieval/Collocations_en.tsv",
+        # dump_data_path="dataset/collocate_retrieval/Collocations_en_test.tsv",
+        # category_num=8,
+        # max_instance_num_per_category=40,
     # )
-    collocate_retrieval_examples = prepare_data_collocate_retrieval(
-        data_path="dataset/collocate_retrieval/Collocations_en_test.tsv",
-        dump_data_path="dataset/collocate_retrieval/prepared/collocate_retrieval_prepared.tsv",
+    # collocate_retrieval_examples = prepare_data_collocate_retrieval(
+        # data_path="dataset/collocate_retrieval/Collocations_en_test.tsv",
+        # dump_data_path="dataset/collocate_retrieval/prepared/collocate_retrieval_prepared.tsv",
+        # base_word_num=3,
+        # collocate_word_num=10,
+    # )
+
+    # Task 9: Noun Compound Interpretation (NCI)
+    # noun_compound_interpretation_examples = prepare_noun_compound_interpretation(
+        # data_path="dataset/noun_compound_interpretation/test_df.csv",
+        # dump_data_path="dataset/noun_compound_interpretation/prepared/noun_compound_interpretation_prepared.tsv",
+    # )
+    noun_compound_interpretation_examples = prepare_noun_compound_interpretation(
+        data_path="dataset/noun_compound_interpretation/valid_df.csv",
+        dump_data_path="dataset/noun_compound_interpretation/prepared/examples.tsv",
     )
